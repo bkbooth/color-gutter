@@ -1,4 +1,5 @@
 {Subscriber} = require 'emissary'
+regexps = require './color-gutter-regexps'
 
 module.exports =
 class ColorGutterView
@@ -44,15 +45,12 @@ class ColorGutterView
     #   matches = regexp.exec line
     # for line in [0...@editor.getLineCount()]
     #   matches = regexp.exec @editor.lineForBufferRow(line)
-    regexp = /#([0-9a-f]{6}|[0-9a-f]{3})[\s;]/im
     for line in [0...@editor.getLineCount()]
-      matches = regexp.exec @editor.lineForBufferRow(line)
-      if matches?
-        @markLine line, @makeColor('hex', matches[1])
-
-  makeColor: (pattern, match) ->
-    switch pattern
-      when 'hex' then "##{match}"
+      for regexp in regexps
+        match = regexp.exec @editor.lineForBufferRow(line)
+        if match?
+          @markLine line, match[0]
+          break
 
   removeDecorations: ->
     return unless @markers?
