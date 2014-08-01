@@ -49,7 +49,7 @@ class ColorGutterView
       for regexp in regexps
         match = regexp.exec @editor.lineForBufferRow(line)
         if match?
-          @markLine line, match[0]
+          @markLine line, match[1]
           break
 
   removeDecorations: ->
