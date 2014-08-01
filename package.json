@@ -1,7 +1,7 @@
 {
   "name": "color-gutter",
   "main": "./lib/color-gutter",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Show colour swatches in the gutter",
   "repository": "https://github.com/bkbooth/color-gutter",
   "license": "MIT",
