@@ -1,6 +1,10 @@
 ColorGutterView = null
 
 module.exports =
+
+  configDefaults:
+    ignoreCommentedLines: false
+
   activate: ->
     atom.workspaceView.command 'color-gutter:toggle', => @toggle()
     @colorGutterViews = []

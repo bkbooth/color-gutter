@@ -18,6 +18,10 @@ class ColorGutterView
       @unsubscribe()
       @unsubscribeFromBuffer()
 
+    @subscribe atom.config.observe 'color-gutter.ignoreCommentedLines', (ignoreCommentedLines) =>
+      @ignoreCommentedLines = ignoreCommentedLines
+      @scheduleUpdate()
+
   destroy: ->
     @unsubscribeFromBuffer()
 
@@ -47,6 +51,7 @@ class ColorGutterView
     #   matches = regexp.exec @editor.lineForBufferRow(line)
     for line in [0...@editor.getLineCount()]
       for regexp in regexps
+        break if @ignoreCommentedLines and @editor.isBufferRowCommented(line)
         match = regexp.exec @editor.lineForBufferRow(line)
         if match?
           @markLine line, match[1]
