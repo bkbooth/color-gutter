@@ -1,3 +1,14 @@
+## 0.3.1 (05/08/2014)
+
+Bugs:
+
+* Fix markers showing on the wrong line when code blocks were folded
+* Improve handling of ignore commented lines setting
+
+Documentation:
+
+* Minor updates
+
 ## 0.3.0 (04/08/2014)
 
 Features:
