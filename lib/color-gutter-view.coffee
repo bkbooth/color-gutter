@@ -10,17 +10,18 @@ class ColorGutterView
     @decorations = {}
     @markers = null
 
-    @subscribe @editorView, 'editor:path-changed', @subscribeToBuffer
+    @ignoreCommentedLines = atom.config.get 'color-gutter.ignoreCommentedLines'
 
-    @subscribeToBuffer()
+    @subscribe @editorView, 'editor:path-changed', @subscribeToBuffer()
 
     @subscribe @editorView, 'editor:will-be-removed', =>
       @unsubscribe()
       @unsubscribeFromBuffer()
 
     @subscribe atom.config.observe 'color-gutter.ignoreCommentedLines', (ignoreCommentedLines) =>
-      @ignoreCommentedLines = ignoreCommentedLines
-      @scheduleUpdate()
+      unless ignoreCommentedLines == @ignoreCommentedLines
+        @ignoreCommentedLines = ignoreCommentedLines
+        @scheduleUpdate()
 
   destroy: ->
     @unsubscribeFromBuffer()
