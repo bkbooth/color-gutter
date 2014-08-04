@@ -1,5 +1,5 @@
 {Subscriber} = require 'emissary'
-regexps = require './color-gutter-regexps'
+RegExps = require './color-gutter-regexps'
 
 module.exports =
 class ColorGutterView
@@ -10,7 +10,10 @@ class ColorGutterView
     @decorations = {}
     @markers = null
 
-    @ignoreCommentedLines = atom.config.get 'color-gutter.ignoreCommentedLines'
+    @config =
+      ignoreCommentedLines: atom.config.get 'color-gutter.ignoreCommentedLines'
+
+    @watchConfigChanges()
 
     @subscribe @editorView, 'editor:path-changed', @subscribeToBuffer()
 
@@ -18,9 +21,10 @@ class ColorGutterView
       @unsubscribe()
       @unsubscribeFromBuffer()
 
+  watchConfigChanges: =>
     @subscribe atom.config.observe 'color-gutter.ignoreCommentedLines', (ignoreCommentedLines) =>
-      unless ignoreCommentedLines == @ignoreCommentedLines
-        @ignoreCommentedLines = ignoreCommentedLines
+      unless ignoreCommentedLines == @config.ignoreCommentedLines
+        @config.ignoreCommentedLines = ignoreCommentedLines
         @scheduleUpdate()
 
   destroy: ->
@@ -51,12 +55,12 @@ class ColorGutterView
     # for line in [0...@editor.getLineCount()]
     #   matches = regexp.exec @editor.lineForBufferRow(line)
     for line in [0...@editor.getLineCount()]
-      for regexp in regexps
-        break if @ignoreCommentedLines and @editor.isBufferRowCommented(line)
-        match = regexp.exec @editor.lineForBufferRow(line)
-        if match?
-          @markLine line, match[1]
-          break
+      unless @config.ignoreCommentedLines and @editor.isBufferRowCommented(line)
+        for regexp in RegExps
+          match = regexp.exec @editor.lineForBufferRow(line)
+          if match?
+            @markLine line, match[1]
+            break
 
   removeDecorations: ->
     return unless @markers?
