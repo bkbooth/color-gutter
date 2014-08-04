@@ -9,7 +9,7 @@ module.exports = [
 
   # eg. #fff
   # eg. #ff0000
-  new RegExp  "(#(#{sets.hex}{6}|#{sets.hex}{3}))[\s;]", "i"
+  new RegExp  "(#(#{sets.hex}{6}|#{sets.hex}{3}))(?=[\\b\\s;]|$)", "i"
 
   # eg. rgb(0, 125, 255)
   # eg. rgba(255, 125, 0, 0.8)
