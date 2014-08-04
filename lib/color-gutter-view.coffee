@@ -11,6 +11,7 @@ class ColorGutterView
     @markers = null
 
     @config =
+      swatchStyle: atom.config.get 'color-gutter.swatchStyle'
       ignoreCommentedLines: atom.config.get 'color-gutter.ignoreCommentedLines'
 
     @watchConfigChanges()
@@ -25,6 +26,11 @@ class ColorGutterView
     @subscribe atom.config.observe 'color-gutter.ignoreCommentedLines', (ignoreCommentedLines) =>
       unless ignoreCommentedLines == @config.ignoreCommentedLines
         @config.ignoreCommentedLines = ignoreCommentedLines
+        @scheduleUpdate()
+
+    @subscribe atom.config.observe 'color-gutter.swatchStyle', (swatchStyle) =>
+      unless swatchStyle == @config.swatchStyle
+        @config.swatchStyle = swatchStyle
         @scheduleUpdate()
 
   destroy: ->
@@ -70,6 +76,12 @@ class ColorGutterView
   markLine: (line, color) ->
     marker = @editor.markBufferRange([[line, 0], [line, Infinity]], invalidate: 'never')
     @editor.decorateMarker(marker, type: 'gutter', class: 'color-gutter')
-    @editorView.find('.line-number-' + line).css({ 'border-right-color': color })
+    switch @config.swatchStyle
+      when 'border-right'
+        @editor.decorateMarker(marker, type: 'gutter', class: 'border-right')
+        @editorView.find('.line-number-' + line).css({ 'border-right-color': color })
+      when 'border-left'
+        @editor.decorateMarker(marker, type: 'gutter', class: 'border-left')
+        @editorView.find('.line-number-' + line).css({ 'border-left-color': color })
     @markers ?= []
     @markers.push marker

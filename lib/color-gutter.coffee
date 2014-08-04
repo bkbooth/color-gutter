@@ -3,6 +3,8 @@ ColorGutterView = null
 module.exports =
 
   configDefaults:
+    # options: border-left, border-right, icon-left, icon-right, gutter-bg, number-bg
+    swatchStyle: 'border-right'
     ignoreCommentedLines: false
 
   activate: ->

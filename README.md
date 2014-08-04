@@ -18,6 +18,18 @@ Show colour swatches in the gutter.
   but [color-picker](https://atom.io/packages/color-picker) already does a great job)
 * Make you pancakes for breakfast
 
+### Config
+
+You may need to use a different swatch style depending what other packages you're using.
+These are the available options:
+
+* `border-left`
+* `border-right` (default)
+* `icon-left`
+* `icon-right`
+* `gutter-bg`
+* `number-bg`
+
 **Note:** I natively speak UK English so I know it should be 'Colour Gutter', I used to
 argue for spelling it 'colour' in all variables and functions, but US English has become the
 language of developers. There's no point having a bunch of variables and functions spelt 'colour'
