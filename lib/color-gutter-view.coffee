@@ -9,19 +9,28 @@ class ColorGutterView
     {@editor, @gutter} = @editorView
     @decorations = {}
     @markers = null
+    @updateTimer = null
 
     @config =
+      updateInterval: atom.config.get 'color-gutter.updateInterval'
       ignoreCommentedLines: atom.config.get 'color-gutter.ignoreCommentedLines'
 
     @watchConfigChanges()
 
-    @subscribe @editorView, 'editor:path-changed', @subscribeToBuffer()
+    @subscribe @editorView, 'editor:display-updated', @subscribeToBuffer
 
     @subscribe @editorView, 'editor:will-be-removed', =>
       @unsubscribe()
       @unsubscribeFromBuffer()
 
-  watchConfigChanges: =>
+  watchConfigChanges: ->
+    @subscribe atom.config.observe 'color-gutter.updateInterval', (updateInterval) =>
+      updateInterval = parseInt updateInterval, 10
+      updateInterval = 200 if isNaN updateInterval or updateInterval < 0
+      unless updateInterval == @config.updateInterval
+        @config.updateInterval = updateInterval
+        @scheduleUpdate()
+
     @subscribe atom.config.observe 'color-gutter.ignoreCommentedLines', (ignoreCommentedLines) =>
       unless ignoreCommentedLines == @config.ignoreCommentedLines
         @config.ignoreCommentedLines = ignoreCommentedLines
@@ -33,20 +42,22 @@ class ColorGutterView
   unsubscribeFromBuffer: ->
     if @buffer?
       @removeDecorations()
-      @buffer.off 'contents-modified', @updateColors
+      @buffer.off 'contents-modified', @scheduleUpdate
       @buffer = null
 
-  subscribeToBuffer: ->
+  subscribeToBuffer: =>
     @unsubscribeFromBuffer()
 
     if @buffer = @editor.getBuffer()
       @scheduleUpdate()
-      @buffer.on 'contents-modified', @updateColors
+      @buffer.on 'contents-modified', @scheduleUpdate
 
-  scheduleUpdate: ->
-    setImmediate(@updateColors)
+  scheduleUpdate: =>
+    clearTimeout @updateTimer
+    @updateTimer = setTimeout @updateColors, @config.updateInterval
 
   updateColors: =>
+    console.log 'updating'
     @removeDecorations()
 
     # Is one of these more performant?

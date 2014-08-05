@@ -1,11 +1,14 @@
+StaticColors = require './color-gutter-colors'
+
 sets =
   hex: "[0-9a-f]"
   byte: "[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]"
   percent: "[0-9]|[1-9][0-9]|100"
   decimal: "0|1\\.?0?|0*\\.\\d+"
   angle: "[+-]?\\d{1,3}"
+  optional_words: "(?:\\w+\\s+(?:\\w+\\s+)?)?"
 
-module.exports = [
+RegExps = [
 
   # eg. #fff
   # eg. #ff0000
@@ -38,4 +41,21 @@ module.exports = [
                 "(,\\s*(#{sets.decimal})\\s*)?" +
               "\\))", "i"
 
+  # eg. color: yellowgreen
+  # eg. border: 1px solid fuchsia
+  # eg. background: deepskyblue
+  # eg. outline: goldenrod
+  # eg. column-rule: solid orangered
+  new RegExp  "(?:color\\s*\\:\\s*" +
+              "|background\\s*\\:\\s*" +
+              "|border\\s*\\:\\s*#{sets.optional_words}" +
+              "|outline\\s*\\:\\s*#{sets.optional_words}" +
+              "|column-rule\\s*\\:\\s*#{sets.optional_words})" +
+              "(?=\\b)(" +
+                StaticColors.map( (element) ->
+                  element.name
+                ).join('|') +
+              ")(?=\\b)"
 ]
+
+module.exports = RegExps

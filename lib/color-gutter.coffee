@@ -3,6 +3,7 @@ ColorGutterView = null
 module.exports =
 
   configDefaults:
+    updateInterval: 200
     ignoreCommentedLines: false
 
   activate: ->
