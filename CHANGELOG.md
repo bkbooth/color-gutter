@@ -1,9 +1,15 @@
+## 0.4.1 (02/04/2015)
+
+Bugs:
+
+* Fixed `package.json` `engines.atom` requirement
+
 ## 0.4.0 (02/04/2015)
 
 Bugs:
 
-* Use atom-text-editor::shadow as well as atom-text-editor
-* Use box-sizing: border-box for gutter width
+* Use `atom-text-editor::shadow` as well as `atom-text-editor`
+* Use `box-sizing: border-box` for gutter width
 * Use `CompositeDisposable` instead of 'emissary', remove dependency
 * Update config spec
 * Use `CommandRegistry`
