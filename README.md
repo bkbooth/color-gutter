@@ -1,5 +1,7 @@
 # Color Gutter for Atom.io
 
+**NOTICE:** I've just unpublished this package from `apm` (07/05/2015). There's a couple of outstanding bugs and there appears to be a memory leak with this package too. I don't use atom as my primary editor and I don't have time to prioritise fixing this. If you have time and interest, feel free to fork and re-publish under your name.
+
 Show colour swatches in the gutter.
 
 ![Color Gutter Preview](https://raw.githubusercontent.com/bkbooth/color-gutter/master/preview.gif)
